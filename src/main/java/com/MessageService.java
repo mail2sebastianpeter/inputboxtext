@@ -20,4 +20,8 @@ public class MessageService {
 	public String Page1(){
 		return "This is a Sample text For testing the pages";
 	}
+	@GetMapping("/page2")
+	public String Page2(){
+		return "This is a Sample text For testing the pages2";
+	}
 }

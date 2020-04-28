@@ -32,4 +32,11 @@ public class TestMessageService {
 		System.out.println("This is a Sample text For testing the pages");
 		Assertions.assertEquals(ms.Page1(), "This is a Sample text For testing the pages");
 	}
+	
+	@Test
+	public void Page2() {
+		MessageService ms = new MessageService();
+		System.out.println("This is a Sample text For testing the pages2");
+		Assertions.assertEquals(ms.Page2(), "This is a Sample text For testing the pages2");
+	}
 }
