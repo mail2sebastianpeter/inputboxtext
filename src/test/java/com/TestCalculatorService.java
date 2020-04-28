@@ -15,8 +15,24 @@ public class TestCalculatorService {
 	@Test
 	public void testsum() {
 	CalculatorService cal = new CalculatorService();
-	Assertions.assertEquals(30, cal.sum());
+	Assertions.assertEquals(33, cal.sum());
 	System.out.println("This is a Sample text test sum test case");
+	
+	}
+	
+	@Test
+	public void testmul() {
+	CalculatorService cal = new CalculatorService();
+	Assertions.assertEquals(242, cal.mul());
+	System.out.println("This is a Sample text case for multiplication");
+	
+	}
+	
+	@Test
+	public void testdiv() {
+	CalculatorService cal = new CalculatorService();
+	Assertions.assertEquals(5, cal.div());
+	System.out.println("This is a Sample text case for division");
 	
 	}
 	
