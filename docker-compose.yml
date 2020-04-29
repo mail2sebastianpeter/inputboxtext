@@ -1,0 +1,16 @@
+vrsion: "2"
+services:
+  db:
+    image: postgres
+  wordpress:
+    image: wordpress
+    ports:
+       - "8086:80"
+    links:
+       - db
+    depends_on:
+       - db
+  my_spring:
+    image: seban04/my-spring:1.0.0
+    ports:
+       - "8888:8085"
