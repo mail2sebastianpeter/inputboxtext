@@ -29,7 +29,7 @@ stage('Deploy Containor'){
     sh 'docker pull seban04/my-spring-app:1.0.0'
 }
 stage('Run Containor'){
-    sh 'docker run -p 8888:8080 -d seban04/my-spring-app:1.0.0 .'
+    sh 'docker run -p 8888:8080 -d seban04/my-spring-app:1.0.0'
 }
 
 }
