@@ -1,9 +1,6 @@
-#This is a Dockerfile for my springBoot Applicaton image
-FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-EXPOSE 8888
-ARG JAR_FILE=/target/*.jar
-COPY ${JAR_FILE} cicd.jar
+FROM tomcat:latest
+ADD target/cicd-pipeline-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+EXPOSE 8080
 RUN echo "I am creating an docker image for my spring boot application"
 MAINTAINER "mail2sebastianpeter@gmail.com"
-ENTRYPOINT ["java", "-jar", "cicd.jar"]
+CMD ["catalina.sh", "run"]
