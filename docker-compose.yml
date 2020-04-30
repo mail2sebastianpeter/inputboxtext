@@ -11,6 +11,7 @@ services:
     depends_on:
        - db
   my_spring:
-    image: seban04/my-spring:1.0.0
+    build: .
+    image: seban04/my-spring-app:1.0.0
     ports:
-       - "8888:8085"
+       - "8888:8080"

@@ -1,0 +1,35 @@
+node{
+
+stage('git checkout'){
+    git credentialsId: 'git-id', url: 'https://github.com/mail2sebastianpeter/CICD-Pipeline.git'
+print"Check out completed"
+}
+
+stage('maven clean'){
+sh 'mvn clean'
+}
+
+stage('maven build'){
+sh 'mvn package spring-boot:repackage'
+}
+
+stage('Build docker image'){
+sh 'docker build -t seban04/my-spring-app:1.0.0 .'
+}
+stage('docker push'){
+withCredentials([string(credentialsId: 'mydocker', variable: 'mydocker')]) {
+
+sh "docker login -u seban04 -p $mydocker"
+
+}
+ sh 'docker push seban04/my-spring-app:1.0.0'
+    
+}
+stage('Deploy Containor'){
+    sh 'docker pull seban04/my-spring-app:1.0.0'
+}
+stage('Run Containor'){
+    sh 'docker run -p 8888:8080 -d seban04/my-spring-app:1.0.0 .'
+}
+
+}
