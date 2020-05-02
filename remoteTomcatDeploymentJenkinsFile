@@ -1,0 +1,44 @@
+node{
+
+stage('git checkout'){
+    git credentialsId: 'git-id', url: 'https://github.com/mail2sebastianpeter/CICD-Pipeline.git'
+print"Check out completed"
+}
+
+stage('maven clean'){
+
+def mavenHome= tool name: 'maven3', type: 'maven'
+def mavenCMD= "${mavenHome}/bin/mvn"
+sh "${mavenCMD} compile"
+}
+
+stage('maven build'){
+sh 'mvn package spring-boot:repackage'
+}
+
+stage('Build docker image'){
+sh "docker build -t seban04/my-spring-app:${env.BUILD_ID} ."
+}
+stage('docker push'){
+withCredentials([string(credentialsId: 'mydocker', variable: 'mydocker')]) {
+
+sh "docker login -u seban04 -p $mydocker"
+
+}
+ sh "docker push seban04/my-spring-app:${env.BUILD_ID}"
+    
+}
+stage('Deploy Containor'){
+    sh "docker pull seban04/my-spring-app:${env.BUILD_ID}"
+}
+
+stage('Deploy to Tomcat remote'){
+    sshagent(['tomcatserver']) {
+    sh 'scp -o StrictHostKeyChecking=no target/*.war root@docker-tomcat:/opt/tomcat/apache-tomcat-9.0.34/webapps'
+}
+}
+stage('Run Containor'){
+    sh "docker run -p 8888:8080 -d seban04/my-spring-app:${env.BUILD_ID}"
+}
+
+}
