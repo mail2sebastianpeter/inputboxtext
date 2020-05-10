@@ -1,35 +1,109 @@
-node{
-
-stage('git checkout'){
-    git credentialsId: 'git-id', url: 'https://github.com/mail2sebastianpeter/CICD-Pipeline.git'
-print"Check out completed"
-}
-
-stage('maven clean'){
-sh 'mvn clean'
-}
-
-stage('maven build'){
-sh 'mvn package spring-boot:repackage'
-}
-
-stage('Build docker image'){
-sh 'docker build -t seban04/my-spring-app:1.0.0 .'
-}
-stage('docker push'){
-withCredentials([string(credentialsId: 'mydocker', variable: 'mydocker')]) {
-
-sh "docker login -u seban04 -p $mydocker"
-
-}
- sh 'docker push seban04/my-spring-app:1.0.0'
+def ipAddress
+pipeline{
     
-}
-stage('Deploy Containor'){
-    sh 'docker pull seban04/my-spring-app:1.0.0'
-}
-stage('Run Containor'){
-    sh 'docker run -p 8888:8080 -d seban04/my-spring-app:1.0.0'
-}
-
+    agent any
+    
+    stages{
+        stage('Git Checkout'){
+            steps{
+                git credentialsId: 'git-id', url: 'https://github.com/mail2sebastianpeter/CICD-Pipeline.git'
+                print"Check out completed"
+            }
+        }
+        stage('Maven Clean'){
+            steps{
+                script{
+                    def mavenHome= tool name: 'maven3', type: 'maven'
+                    def mavenCMD= "${mavenHome}/bin/mvn"
+                    sh "${mavenCMD} compile"
+                }
+            }
+            
+        }
+        stage('Maven Build'){
+            steps{
+                sh 'mvn package spring-boot:repackage'
+            }
+        }
+        stage('Sonar Test'){
+            steps{
+                script{
+                withSonarQubeEnv(credentialsId: 'mysonarpass') {
+                sh 'mvn sonar:sonar'
+                    }
+                }
+            }
+        }
+        stage('Build Docker Image'){
+            steps{
+                sh "docker build -t seban04/my-spring-app:${env.BUILD_ID} ."
+            }
+        }
+        stage('Push Docker Image'){
+            steps{
+                script{
+                    withCredentials([string(credentialsId: 'mydocker', variable: 'mydocker')]){
+                        sh "docker login -u seban04 -p $mydocker"
+                    }
+                    sh "docker push seban04/my-spring-app:${env.BUILD_ID}"
+                }
+            }
+        }
+        stage ('EC2 Instance Creation'){
+            steps{
+                script{
+                    ansiblePlaybook becomeUser: 'ec2-user', credentialsId: 'ec2-user', playbook: '/root/.jenkins/workspace/Test/ec2-creation.yml', sudoUser: null
+                }
+            }
+        }
+        stage('Fetching IP'){
+            steps{
+                script{
+                    sleep 15
+                    def ipfetch ='aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress[]"'
+                    def out = sh script :"${ipfetch}",returnStdout:true
+                    def ipsplit = out.split('"')
+                    ipAddress = ipsplit[1]
+                    print ipAddress
+                }
+            }
+        }
+        stage('Installing Docker on EC2'){
+            steps{
+                script{
+                    print ipAddress
+                    def dockerCMD= 'sudo yum install docker -y'
+                    sshagent(['ec2-user']){
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@${ipAddress} ${dockerCMD}"
+                    }
+                }
+            }
+        }
+        stage('Start Docker'){
+            steps{
+                script{
+                    def dockerCMD = 'sudo service docker start'
+                    sshagent(['ec2-user']){
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@${ipAddress} ${dockerCMD}"
+                    }
+                }
+            }
+        }
+        stage ('Run Docker Image'){
+            steps{
+                script{
+                    def dockerCMD = "sudo docker run -d -p 80:8885 seban04/my-spring-app:${env.BUILD_ID}"
+                    sshagent(['ec2-user']){
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@${ipAddress} ${dockerCMD}"
+                    }
+                }
+            }
+        }
+    }
+    post{
+        failure{
+            emailext attachLog: true, body: '''$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
+            Check console output at $BUILD_URL to view the results.''', replyTo: 'noreplay@jenkins.com', subject: 'Jenkins Build Failure !!! $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'mail2sebastianpeter@gmail.com'
+        }
+    }
 }
