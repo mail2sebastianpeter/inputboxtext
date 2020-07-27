@@ -5,7 +5,12 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   
-  
+   <repositories>
+    <repository>
+      <id>maven-central</id>
+      <url>http://35.193.140.58:9000/repository/maven-central/</url>
+    </repository>
+  </repositories>
 
   
     <parent>
