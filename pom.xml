@@ -7,11 +7,11 @@
    
 <distributionManagement>
     <snapshotRepository>
-      <id>nexus-snapshots</id>
+      <id>project-snapshots</id>
       <url>http://35.192.173.53:9000/repository/project-snapshot/</url>
     </snapshotRepository>
     <repository>
-      <id>nexus-releases</id>
+      <id>project-releases</id>
       <url>http://35.192.173.53:9000/repository/project-release/</url>
     </repository>
   </distributionManagement>
