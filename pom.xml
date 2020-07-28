@@ -15,9 +15,6 @@
       <url>http://35.192.173.53:9000/repository/project-release/</url>
     </repository>
   </distributionManagement>
-</project>	
-	
-	
 	
     <parent>
         <groupId>org.springframework.boot</groupId>
