@@ -5,6 +5,20 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
    
+<distributionManagement>
+    <snapshotRepository>
+      <id>nexus-snapshots</id>
+      <url>http://35.192.173.53:9000/repository/project-snapshot/</url>
+    </snapshotRepository>
+    <repository>
+      <id>nexus-releases</id>
+      <url>http://35.192.173.53:9000/repository/project-release/</url>
+    </repository>
+  </distributionManagement>
+</project>	
+	
+	
+	
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
