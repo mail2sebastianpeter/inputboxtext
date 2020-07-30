@@ -1,0 +1,6 @@
+import groovy.transform.Field
+
+@Field
+def text = 'sampletext'
+
+return this;
