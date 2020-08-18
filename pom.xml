@@ -12,7 +12,7 @@
     		</repository>
   	</repositories>
 	
-<!--
+
 <distributionManagement>
     <snapshotRepository>
       <id>project-snapshots</id>
@@ -23,7 +23,7 @@
       <url>http://104.198.28.146:9000/repository/project-release/</url>
     </repository>
   </distributionManagement>
--->	
+	
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
