@@ -16,11 +16,11 @@
 <distributionManagement>
     <snapshotRepository>
       <id>project-snapshots</id>
-      <url>http://104.198.28.146:9000/repository/project-snapshot/</url>
+      <url>http://34.121.198.72:9000/repository/project-snapshot/</url>
     </snapshotRepository>
     <repository>
       <id>project-releases</id>
-      <url>http://104.198.28.146:9000/repository/project-release/</url>
+      <url>http://34.121.198.72:9000/repository/project-release/</url>
     </repository>
   </distributionManagement>
 	
