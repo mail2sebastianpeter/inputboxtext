@@ -5,6 +5,14 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
    
+	<repositories>
+    		<repository>
+      			<id>maven-group</id>
+      				<url>http://34.121.198.72:9000/repository/project-group/</url>
+    		</repository>
+  	</repositories>
+	
+	
 <distributionManagement>
     <snapshotRepository>
       <id>project-snapshots</id>
