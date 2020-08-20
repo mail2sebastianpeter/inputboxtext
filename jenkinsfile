@@ -14,6 +14,6 @@ sh 'mvn -s settings.xml package spring-boot:repackage'
 }
 stage('Nexus Deploy'){
            
-        nexusArtifactUploader artifacts: [[artifactId: 'cicd-pipeline', classifier: '', file: 'target/cicd-pipeline-0.0.1-SNAPSHOT.war', type: 'war']], credentialsId: 'nexus', groupId: 'org.devops', nexusUrl: '34.121.198.72:9000', nexusVersion: 'nexus3', protocol: 'http', repository: 'sample_project2', version: '0.0.${BUILD_NUMBER}-SNAPSHOT'
+        nexusArtifactUploader artifacts: [[artifactId: 'cicd-pipeline', classifier: '', file: 'target/cicd-pipeline-0.0.1-SNAPSHOT.war', type: 'war']], credentialsId: 'nexus', groupId: 'org.devops', nexusUrl: '35.232.77.109:9000', nexusVersion: 'nexus3', protocol: 'http', repository: 'sample_project2', version: '0.0.${BUILD_NUMBER}-SNAPSHOT'
         }
 }
