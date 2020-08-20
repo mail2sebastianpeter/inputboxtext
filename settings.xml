@@ -19,7 +19,7 @@
     <mirror>
       <id>maven-central</id>
       <name>maven-central</name>
-      <url>http://34.121.198.72:9000/repository/project-group/</url>
+      <url>http://35.232.77.109:9000/repository/project-group/</url>
       <mirrorOf>*</mirrorOf>
     </mirror>
   </mirrors>
